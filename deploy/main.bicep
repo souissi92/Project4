@@ -22,152 +22,21 @@ param vmName string = 'simple-vm'
   'TrustedLaunch'
 ])
 param securityType string = 'TrustedLaunch'
-var nicName = '${vmName}-Nic'
-var addressPrefix = '10.0.0.0/16'
-var subnetName = 'Subnet'
-var subnetPrefix = '10.0.0.0/24'
-var virtualNetworkName = 'VNET-Prodution'
-var networkSecurityGroupName = 'default-NSG'
-var securityProfileJson = {
-  uefiSettings: {
-    secureBootEnabled: true
-    vTpmEnabled: true
-  }
-  securityType: securityType
-}
-var extensionName = 'GuestAttestation'
-var extensionPublisher = 'Microsoft.Azure.Security.WindowsAttestation'
-var extensionVersion = '1.0'
-var maaTenantName = 'GuestAttestation'
-var maaEndpoint = substring('emptyString', 0, 0)
-resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-05-01' = {
-  name: networkSecurityGroupName
-  location: location
-  properties: {
-    securityRules: [
-      {
-        name: 'default-allow-3389'
-        properties: {
-          priority: 1000
-          access: 'Allow'
-          direction: 'Inbound'
-          destinationPortRange: '3389'
-          protocol: 'Tcp'
-          sourcePortRange: '*'
-          sourceAddressPrefix: '*'
-          destinationAddressPrefix: '*'
-        }
-      }
-    ]
+module net 'modules/Network.bicep' =  {
+  name: 'network'
+  params: {
+    location: location
   }
 }
-
-resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
-  name: virtualNetworkName
-  location: location
-  properties: {
-    addressSpace: {
-      addressPrefixes: [
-        addressPrefix
-      ]
-    }
-    subnets: [
-      {
-        name: subnetName
-        properties: {
-          addressPrefix: subnetPrefix
-          networkSecurityGroup: {
-            id: networkSecurityGroup.id
-          }
-        }
-      }
-    ]
-  }
-}
-
-resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
-  name: nicName
-  location: location
-  properties: {
-    ipConfigurations: [
-      {
-        name: 'ipconfig1'
-        properties: {
-          privateIPAllocationMethod: 'Dynamic'
-          subnet: {
-            id: resourceId('Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, subnetName)
-          }
-        }
-      }
-    ]
-  }
-  dependsOn: [
-
-    virtualNetwork
-  ]
-}
-
-resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
+module VM 'modules/VM.bicep' = {
   name: vmName
-  location: location
-  properties: {
-    hardwareProfile: {
-      vmSize: vmSize
-    }
-    osProfile: {
-      computerName: vmName
-      adminUsername: adminUsername
-      adminPassword: adminPassword
-    }
-    storageProfile: {
-      imageReference: {
-        publisher: 'MicrosoftWindowsServer'
-        offer: 'WindowsServer'
-        sku: OSVersion
-        version: 'latest'
-      }
-      osDisk: {
-        createOption: 'FromImage'
-        managedDisk: {
-          storageAccountType: 'StandardSSD_LRS'
-        }
-      }
-      dataDisks: [
-        {
-          diskSizeGB: 1023
-          lun: 0
-          createOption: 'Empty'
-        }
-      ]
-    }
-    networkProfile: {
-      networkInterfaces: [
-        {
-          id: nic.id
-        }
-      ]
-    }
-    securityProfile: ((securityType == 'TrustedLaunch') ? securityProfileJson : null)
-  }
-}
-
-resource vmExtension 'Microsoft.Compute/virtualMachines/extensions@2022-03-01' = if ((securityType == 'TrustedLaunch') && ((securityProfileJson.uefiSettings.secureBootEnabled == true) && (securityProfileJson.uefiSettings.vTpmEnabled == true))) {
-  parent: vm
-  name: extensionName
-  location: location
-  properties: {
-    publisher: extensionPublisher
-    type: extensionName
-    typeHandlerVersion: extensionVersion
-    autoUpgradeMinorVersion: true
-    enableAutomaticUpgrade: true
-    settings: {
-      AttestationConfig: {
-        MaaSettings: {
-          maaEndpoint: maaEndpoint
-          maaTenantName: maaTenantName
-        }
-      }
-    }
+  params: {
+    adminPassword: adminPassword
+    adminUsername: adminUsername
+    vmName: vmName
+    vmSize: vmSize
+    OSVersion:OSVersion
+    securityType:securityType
+    location:location
   }
 }
