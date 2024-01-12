@@ -60,6 +60,9 @@ resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
   name: vmName
   location: location
   properties: {
+    tags: {
+      'environement': 'DEV'
+    }
     hardwareProfile: {
       vmSize: vmSize
     }
