@@ -22,11 +22,11 @@ param vmName string = 'simple-vm'
   'TrustedLaunch'
 ])
 param securityType string = 'TrustedLaunch'
-var nicName = 'myVMNic'
+var nicName = '${vmName}-Nic'
 var addressPrefix = '10.0.0.0/16'
 var subnetName = 'Subnet'
 var subnetPrefix = '10.0.0.0/24'
-var virtualNetworkName = 'MyVNET'
+var virtualNetworkName = 'VNET-Prodution'
 var networkSecurityGroupName = 'default-NSG'
 var securityProfileJson = {
   uefiSettings: {
