@@ -116,4 +116,4 @@ jobs:
                     sudo apt-get install -y powershell
           
                     # Run the smoke test script
-                    pwsh -ExecutionPolicy Bypass -File smoke_test.ps1
+                    pwsh -ExecutionPolicy Bypass -File ./deploy/smoke_test.ps1
