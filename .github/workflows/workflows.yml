@@ -1,11 +1,6 @@
 name: Deploy-firstVM
 
-on:
-  push:
-    branches:
-      - master
-    paths:
-      - '.github/workflows/**'
+on: [workflow_dispatch]
 permissions:
   id-token: write
   contents: read
