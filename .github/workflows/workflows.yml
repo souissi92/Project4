@@ -17,6 +17,8 @@ env:
     securityType: Standard
     VmName: VM-E
     vmSize: Standard_D2s_v5
+    ENVIRONMENT_TYPE: test
+    
     
 
 jobs:
