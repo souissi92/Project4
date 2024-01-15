@@ -39,7 +39,7 @@ function Test-VMOperatingSystem {
 
     # Additional OS checks can be added here
 }
-
+ping $ipAddress
 # Function to perform other tests...
 
 # Additional tests can be added by calling corresponding functions
