@@ -104,6 +104,7 @@ jobs:
             - run: |
                 $container = New-PesterContainer `
                   -Path './deploy/VM.test.ps1' 
+                  -Data @{ HostName = '${{needs.deploy.outputs.appServiceAppHostName}}' }
                 Invoke-Pester `
                   -Container $container `
                   -CI
