@@ -15,7 +15,7 @@ env:
     adminUsername: elgonusername
     adminPassword: OurPmmmw0rd1998
     securityType: Standard
-    VmName: VM-E
+    VmName: VM-AD1
     vmSize: Standard_D2s_v5
     ENVIRONMENT_TYPE: Test
     
