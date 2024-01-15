@@ -59,10 +59,10 @@ resource nic 'Microsoft.Network/networkInterfaces@2022-05-01' = {
 resource vm 'Microsoft.Compute/virtualMachines@2022-03-01' = {
   name: vmName
   location: location
+  tags: {
+    'environement': 'DEV'
+  }
   properties: {
-    tags: {
-      'environement': 'DEV'
-    }
     hardwareProfile: {
       vmSize: vmSize
     }
