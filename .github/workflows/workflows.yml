@@ -100,13 +100,20 @@ jobs:
             runs-on: ubuntu-latest
             needs: deploy
             steps:
-            - uses: actions/checkout@v3
-            - run: |
-                $container = New-PesterContainer `
-                  -Path './deploy/VM.test.ps1' 
-                  -Data @{ HostName = '${{needs.deploy.outputs.appServiceAppHostName}}' }
-                Invoke-Pester `
-                  -Container $container `
-                  -CI
-              name: Run smoke tests
-              shell: pwsh
+              
+                - name: Checkout repository
+                  uses: actions/checkout@v3
+          
+                - name: Set VM name
+                  run: |
+                    # Replace 'myVM' with the actual name of your VM
+                    vm_name=${{env.VmName}}
+          
+                - name: Smoke test
+                  run: |
+                    # Install PowerShell
+                    sudo apt-get update
+                    sudo apt-get install -y powershell
+          
+                    # Run the smoke test script
+                    pwsh -ExecutionPolicy Bypass -File smoke_test.ps1
