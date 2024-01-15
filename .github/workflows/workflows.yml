@@ -49,7 +49,6 @@ jobs:
           securityType=${{env.securityType}}
           vmName=${{env.VmName}}
           vmSize=${{env.vmSize}}
-          environmentType=${{ env.ENVIRONMENT_TYPE }}
 
   preview:
             runs-on: ubuntu-latest
@@ -69,7 +68,6 @@ jobs:
                 resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
                 template: deploy/main.bicep
                 parameters: >
-                  environmentType=${{ env.ENVIRONMENT_TYPE }}
                   adminUsername=${{ env.adminUsername }}
                   adminPassword=${{ env.adminPassword }}
                   securityType=${{env.securityType}}
@@ -98,4 +96,3 @@ jobs:
           securityType=${{env.securityType}}
           vmName=${{env.VmName}}
           vmSize=${{env.vmSize}}
-          environmentType=${{ env.ENVIRONMENT_TYPE }}
