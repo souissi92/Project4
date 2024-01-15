@@ -17,7 +17,7 @@ env:
     securityType: Standard
     VmName: VM-E
     vmSize: Standard_D2s_v5
-    ENVIRONMENT_TYPE: test
+    ENVIRONMENT_TYPE: Test
     
     
 
@@ -69,6 +69,11 @@ jobs:
                 template: deploy/main.bicep
                 parameters: >
                   environmentType=${{ env.ENVIRONMENT_TYPE }}
+                  adminUsername=${{ env.adminUsername }}
+                  adminPassword=${{ env.adminPassword }}
+                  securityType=${{env.securityType}}
+                  vmName=${{env.VmName}}
+                  vmSize=${{env.vmSize}}
                 additionalArguments: --what-if
   deploy:
     runs-on: ubuntu-latest
