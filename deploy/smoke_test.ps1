@@ -2,7 +2,7 @@
 Install-Module -Name Az -Force
 
 # Set VM name
-$vm_name="VM-AD1"
+$vm_name="VM-AD"
 
 # Connect to the VM
 $vm = Connect-AzVM -Name $vm_name -ResourceGroupName myResourceGroupName
