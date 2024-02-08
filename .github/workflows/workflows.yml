@@ -11,7 +11,7 @@ env:
     adminPassword: OurPmmmw0rd1998
     securityType: Standard
     VmName: VM-AD2
-    vmSize: Standard_D2s_v5
+    vmSize: B2s
     ENVIRONMENT_TYPE: Test
     
     
