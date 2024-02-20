@@ -1,0 +1,29 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.x'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- script: |
+    dotnet tool install -g Microsoft.Bicep
+  displayName: 'Install Bicep CLI'
+
+- script: |
+    bicep build YourBicepFile.bicep
+  displayName: 'Build Bicep file'
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: '373828f5-758e-442f-8758-b846807b96f8'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az group deployment create --name MyDeployment --resource-group Project4 --template-file  ./deploy/main.bicep.json
+  displayName: 'Deploy Bicep template'
